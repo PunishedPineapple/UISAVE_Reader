@@ -16,12 +16,27 @@ namespace UISAVE_Reader.ConfigSections
 		{
 			public bool IsEnabled;
 			public Position Pos;
+			public override string ToString()
+			{
+				return IsEnabled ? ( Pos.X.ToString( " 000.00;-000.00" ) + ", " + Pos.Y.ToString( " 000.00;-000.00" ) + ", " + Pos.Z.ToString( " 000.00;-000.00" ) ) : "Unused";
+			}
 		}
 		public struct WaymarkPreset
 		{
 			public UInt16 ZoneID;
 			public Int32 UnixTimestamp;
 			public Waymark[] Waymarks;
+
+			public override string ToString()
+			{
+				string str = "";
+				for( uint i = 0u; i < Waymarks.Length; ++i )
+				{
+					str += "Waymark Index " + i.ToString() + ": " + Waymarks[i].ToString() + "\r\n";
+				}
+				str += "\r\nZone ID: " + ZoneID.ToString() + "\r\nLast Modified: " + UnixTimestamp.ToString() + " (Unix Time)";
+				return str;
+			}
 		}
 
 		public ConfigSection_WaymarkPresets( uint fileOffset_Bytes, byte[] sectionHeader, byte[] sectionData ) :
@@ -73,7 +88,13 @@ namespace UISAVE_Reader.ConfigSections
 
 		public override string ToString()
 		{
-			return "See debug data for now.";
+			string str = "Waymark Presets Section ( ID: " + SectionID.ToString() + ", Offset in File( includes section header ): 0x" + FileOffset.ToString( "X" ) + ", Length: 0x" + SectionData.Length.ToString( "X" ) + " bytes( excluding section header ) )\r\n";
+			foreach( WaymarkPreset preset in Presets )
+			{
+				str += preset.ToString();
+				str += "\r\n-----------\r\n";
+			}
+			return str;
 		}
 
 		public byte[] Bytes0to15 { get; protected set; } = new byte[16];
