@@ -34,6 +34,7 @@ Sections map out in memory to the following (in-order):
 * GRPPOS.DAT
 * CRAFT.DAT
 * FMARKER.DAT
+
 (Thank you Wintermute)
 
 Rough information about each section format below.
