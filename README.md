@@ -43,7 +43,7 @@ Sent letter history.  First 4 bytes unknown, possibly duplicate section ID.  Nex
 ### Social (Section 0x4, UIDATA.DAT)
 Starts with friends list group titles.  Also contains recent contacts list, as well as lists at least related to, if not copies of, friends list and blacklist.  Entries of friends are name, then eight byte content ID, then server ID.
 ### Teleport History (Section 0x5, TLPH.DAT)
-Aetheryte Teleport History.  0x42 encoded, First byte aetheryte number, followed by five empty bytes, repeated for 20 total entries.
+Aetheryte Teleport History.  0x73-encoded, First byte aetheryte number, followed by five empty bytes, repeated for 20 total entries.
 ### CWLS (Section 0xD, CWLS.DAT)
 Contains CWLS slot assignments, unsure if anything else.
 ### Field Markers (Section 0x11, FMARKER.DAT)
