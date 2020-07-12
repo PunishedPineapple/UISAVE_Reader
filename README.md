@@ -8,11 +8,11 @@ Processes the FFXIV UISAVE.DAT file format.
 * First eight bytes unknown.
 * Next eight bytes are the character's 64-bit integer Content ID.
 * The remainder of the valid data in the file is arranged in sections.  These are formatted as follows:
-** 16-byte header.  First two bytes are section index, starting at 0.  The next six bytes are of unknown use.  Byte 8 of the section header is the length (in bytes) of the section's data (excluding the header).  The remaining four header bytes are of unknown purpose.
-** Data.
-** Four trailing bytes.  These seem to always be zero. Possibly reserved for a checksum, but unsure.
-** Some sections start with a 0xFF byte, and these need to be further XOR'd by 0x73 to read.
-* With this format, each section must be processed to find the next section due to arbitrary lengths.
+  * 16-byte header.  First two bytes are section index, starting at 0.  The next six bytes are of unknown use.  Byte 8 of the section header is the length (in bytes) of the section's data (excluding the header).  The remaining four header bytes are of unknown purpose.
+  * Data.
+  * Four trailing bytes.  These seem to always be zero. Possibly reserved for a checksum, but unsure.
+  * Some sections start with a 0xFF byte, and these need to be further XOR'd by 0x73 to read.
+* With this format, each section must be processed to find the next section due to the arbitrary lengths.
 
 ## Sections
 Sections map out in memory to the following (in-order):
@@ -42,7 +42,9 @@ Rough information about each section format below.
 ### Mail History (Section 0x0, LETTER.DAT)
 Sent letter history.  First 4 bytes unknown, possibly duplicate section ID.  Next 4 bytes likely number of valid entries. Next 8 bytes unkown, possibly padding.  Entries: 128 Bytes total per entry: 36? Bytes for recipient name, four bytes for gil amount, four byte unix timestamp, four bytes item number 1 id (HQ encoded by adding 1000000), four bytes quantity item number 1, repeat items 2-5, last 44 bytes unknown.
 ### Social (Section 0x4, UIDATA.DAT)
-Starts with friends list group titles.  Also contains recent contacts list, as well as lists at least related to, if not copies of, friends list and blacklist.  Entries of friends are name, then eight byte content ID, then server ID.
+Starts with friends list group titles - 15 UTF-8 characters maximum per name, unsure of remaining 4 bytes between group names (Maybe just null four-byte termination?).  UI doesn't seem to accept characters longer than three bytes though, may or may not be more going on here.
+
+Also contains recent contacts list, as well as lists at least related to, if not copies of, friends list and blacklist.  Entries of friends are name, then eight byte content ID, then server ID.
 ### Teleport History (Section 0x5, TLPH.DAT)
 Aetheryte Teleport History.  0x73-encoded, First byte aetheryte number, followed by five empty bytes, repeated for 20 total entries.
 ### CWLS (Section 0xD, CWLS.DAT)
